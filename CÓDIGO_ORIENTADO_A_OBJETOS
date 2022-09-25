@@ -1,0 +1,236 @@
+----------------------------------MAIN-------------------------------------------------
+public class Main {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+
+        //Instanciar puesto primero
+        Puesto puesto1 = new Puesto(1, "gerente");
+        Puesto puesto2 = new Puesto(2, "Ejecutivo");
+
+        //Instanciar empleado
+        Empleado emp1 = new Empleado("1-9", "Sebastian", "Vidal", 'M', 15, 30, puesto1);
+        Empleado emp2 = new Empleado("2-8", "Andres", "Landaeta", 'M', 5, 40, puesto1);
+        Empleado emp3 = new Empleado("3-7", "Maria", "Gutierrez", 'F', 20, 40, puesto2);
+
+        //instanciar la clase empresa
+        Empresa empresa = new Empresa();
+        empresa.agregarEmpleado(emp1);
+        empresa.agregarEmpleado(emp2);
+        empresa.agregarEmpleado(emp3);
+        empresa.agregarEmpleado(emp3);
+
+        empresa.mostrarListaEmpleados();
+
+        if (empresa.eliminarEmpleado("2-8")) {
+            System.out.println("Empleado eliminado");
+        } else {
+            System.out.println("Empleado no existe");
+        }
+
+        empresa.mostrarListaEmpleados();
+        
+        empresa.mostrarGerentes();
+
+    }
+
+}
+
+
+
+-----------------------------CLASS-PUESTO--------------------------------
+public class Puesto {
+    
+    private int codigo;
+    private String nombre;
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Puesto(int codigo, String nombre) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+    }
+
+    public Puesto() {
+    }
+
+    @Override
+    public String toString() {
+        return "Puesto{" + "codigo=" + codigo + ", nombre=" + nombre + '}';
+    }    
+}
+
+----------------------CLASS_EMPLEADO-----------------------------
+public class Empleado {
+    
+    private String rut, nombre, apellido;
+    private char genero;
+    private int aniosServicio, edad;
+    private Puesto puesto;
+
+    public Empleado(String rut, String nombre, String apellido, char genero, int aniosServicio, int edad, Puesto puesto) {
+        this.rut = rut;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.genero = genero;
+        this.aniosServicio = aniosServicio;
+        this.edad = edad;
+        this.puesto = puesto;
+    }
+
+    public Empleado() {
+    }
+
+    public String getRut() {
+        return rut;
+    }
+
+    public void setRut(String rut) {
+        this.rut = rut;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public char getGenero() {
+        return genero;
+    }
+
+    public void setGenero(char genero) {
+        this.genero = genero;
+    }
+
+    public int getAniosServicio() {
+        return aniosServicio;
+    }
+
+    public void setAniosServicio(int aniosServicio) {
+        this.aniosServicio = aniosServicio;
+    }
+
+    public int getEdad() {
+        return edad;
+    }
+
+    public void setEdad(int edad) {
+        this.edad = edad;
+    }
+
+    public Puesto getPuesto() {
+        return puesto;
+    }
+
+    public void setPuesto(Puesto puesto) {
+        this.puesto = puesto;
+    }
+
+    @Override
+    public String toString() {
+        return "Empleado{" + "rut=" + rut + ", nombre=" + nombre + ", apellido=" + apellido + ", genero=" + genero + ", aniosServicio=" + aniosServicio + ", edad=" + edad + ", puesto=" + puesto + '}';
+    }   
+}
+
+--------------------------------CLASS_EMPRESA------------------------------
+import java.util.ArrayList;
+
+public class Empresa {
+    
+    private ArrayList<Empleado> listaEmpleados;
+
+    //constructor sin parametros
+    public Empresa() {
+        listaEmpleados = new ArrayList<Empleado>();
+    }
+    
+    
+    //metodo para agregar un elemento en la lista
+    public boolean agregarEmpleado(Empleado empleado)
+    {
+        if(this.buscarEmpleado(empleado.getRut()))
+        {
+            System.out.println("El rut ya existe en la lista");
+            return false;
+        }
+        
+        return this.listaEmpleados.add(empleado);
+    }
+    
+    //metodo para mostrar empleados
+    public void mostrarListaEmpleados()
+    {
+        for(Empleado e : this.listaEmpleados)
+        {
+            System.out.println(e.toString());
+        }       
+    }
+    
+       //metodo para mostrar empleados
+    public void mostrarGerentes()
+    {
+        System.out.println("Los empleados que son gerentes:");
+        for(Empleado e : this.listaEmpleados)
+        {
+            if(e.getPuesto().getCodigo() == 1)
+            {
+             System.out.println(e.toString());
+            }
+           
+        }       
+    }
+    
+    //metodo para buscar empleado por rut
+    public boolean buscarEmpleado(String rutBuscado)
+    {
+        for(Empleado emp: this.listaEmpleados)
+        {
+            if(emp.getRut().equalsIgnoreCase(rutBuscado))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    //metodo para eliminar empleado por rut
+    public boolean eliminarEmpleado(String rutaEliminar)
+    {
+        for(Empleado emp: this.listaEmpleados)
+        {
+            if(emp.getRut().equalsIgnoreCase(rutaEliminar))
+            {
+                this.listaEmpleados.remove(emp);
+                return true;
+            }
+        }
+        return false;        
+    }   
+}
